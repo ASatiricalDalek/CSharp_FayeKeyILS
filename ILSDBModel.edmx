@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ILSDBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Data Source=E:\Code\Git\FayeKeyILS\ILSDB.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Checkout">
+          <Key>
+            <PropertyRef Name="materialID" />
+            <PropertyRef Name="patronLibraryID" />
+          </Key>
+          <Property Name="materialID" Type="integer" Nullable="false" />
+          <Property Name="patronLibraryID" Type="integer" Nullable="false" />
+          <Property Name="returnDate" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="checkoutDate" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoanLength">
+          <Key>
+            <PropertyRef Name="MaterialType" />
+          </Key>
+          <Property Name="MaterialType" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="LoanLength" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="patronLibraryID" Type="integer" Nullable="false" />
+          <Property Name="materialType" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="materialLoanLength" Type="integer" Nullable="false" />
+          <Property Name="materialName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patron">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="patronFirstName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="patronLastName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="patronEmail" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="patronPhone" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <Association Name="FK_Checkout_0_0">
+          <End Role="Patron" Type="Self.Patron" Multiplicity="1" />
+          <End Role="Checkout" Type="Self.Checkout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patron">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Checkout">
+              <PropertyRef Name="patronLibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Checkout_1_0">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Checkout" Type="Self.Checkout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Checkout">
+              <PropertyRef Name="materialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_0_0">
+          <End Role="LoanLength" Type="Self.LoanLength" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanLength">
+              <PropertyRef Name="MaterialType" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="materialType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_1_0">
+          <End Role="Patron" Type="Self.Patron" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patron">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="patronLibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ILSDBModelStoreContainer">
+          <EntitySet Name="Checkout" EntityType="Self.Checkout" store:Type="Tables" />
+          <EntitySet Name="LoanLength" EntityType="Self.LoanLength" store:Type="Tables" />
+          <EntitySet Name="Material" EntityType="Self.Material" store:Type="Tables" />
+          <EntitySet Name="Patron" EntityType="Self.Patron" store:Type="Tables" />
+          <AssociationSet Name="FK_Checkout_0_0" Association="Self.FK_Checkout_0_0">
+            <End Role="Patron" EntitySet="Patron" />
+            <End Role="Checkout" EntitySet="Checkout" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Checkout_1_0" Association="Self.FK_Checkout_1_0">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Checkout" EntitySet="Checkout" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_0_0" Association="Self.FK_Material_0_0">
+            <End Role="LoanLength" EntitySet="LoanLength" />
+            <End Role="Material" EntitySet="Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_1_0" Association="Self.FK_Material_1_0">
+            <End Role="Patron" EntitySet="Patron" />
+            <End Role="Material" EntitySet="Material" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ILSDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Checkout">
+          <Key>
+            <PropertyRef Name="materialID" />
+            <PropertyRef Name="patronLibraryID" />
+          </Key>
+          <Property Name="materialID" Type="Int64" Nullable="false" />
+          <Property Name="patronLibraryID" Type="Int64" Nullable="false" />
+          <Property Name="returnDate" Type="Decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="checkoutDate" Type="Decimal" Precision="53" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Patron" Relationship="Self.FK_Checkout_0_0" FromRole="Checkout" ToRole="Patron" />
+          <NavigationProperty Name="Material" Relationship="Self.FK_Checkout_1_0" FromRole="Checkout" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="LoanLength">
+          <Key>
+            <PropertyRef Name="MaterialType" />
+          </Key>
+          <Property Name="MaterialType" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoanLength1" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Materials" Relationship="Self.FK_Material_0_0" FromRole="LoanLength" ToRole="Material" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="patronLibraryID" Type="Int64" Nullable="false" />
+          <Property Name="materialType" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="materialLoanLength" Type="Int64" Nullable="false" />
+          <Property Name="materialName" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Checkouts" Relationship="Self.FK_Checkout_1_0" FromRole="Material" ToRole="Checkout" />
+          <NavigationProperty Name="LoanLength" Relationship="Self.FK_Material_0_0" FromRole="Material" ToRole="LoanLength" />
+          <NavigationProperty Name="Patron" Relationship="Self.FK_Material_1_0" FromRole="Material" ToRole="Patron" />
+        </EntityType>
+        <EntityType Name="Patron">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="patronFirstName" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="patronLastName" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="patronEmail" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="patronPhone" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Checkouts" Relationship="Self.FK_Checkout_0_0" FromRole="Patron" ToRole="Checkout" />
+          <NavigationProperty Name="Materials" Relationship="Self.FK_Material_1_0" FromRole="Patron" ToRole="Material" />
+        </EntityType>
+        <Association Name="FK_Checkout_0_0">
+          <End Role="Patron" Type="Self.Patron" Multiplicity="1" />
+          <End Role="Checkout" Type="Self.Checkout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patron">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Checkout">
+              <PropertyRef Name="patronLibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Checkout_1_0">
+          <End Role="Material" Type="Self.Material" Multiplicity="1" />
+          <End Role="Checkout" Type="Self.Checkout" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Checkout">
+              <PropertyRef Name="materialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_0_0">
+          <End Role="LoanLength" Type="Self.LoanLength" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LoanLength">
+              <PropertyRef Name="MaterialType" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="materialType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Material_1_0">
+          <End Role="Patron" Type="Self.Patron" Multiplicity="1" />
+          <End Role="Material" Type="Self.Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patron">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Material">
+              <PropertyRef Name="patronLibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ILSDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Checkouts" EntityType="Self.Checkout" />
+          <EntitySet Name="LoanLengths" EntityType="Self.LoanLength" />
+          <EntitySet Name="Materials" EntityType="Self.Material" />
+          <EntitySet Name="Patrons" EntityType="Self.Patron" />
+          <AssociationSet Name="FK_Checkout_0_0" Association="Self.FK_Checkout_0_0">
+            <End Role="Patron" EntitySet="Patrons" />
+            <End Role="Checkout" EntitySet="Checkouts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Checkout_1_0" Association="Self.FK_Checkout_1_0">
+            <End Role="Material" EntitySet="Materials" />
+            <End Role="Checkout" EntitySet="Checkouts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_0_0" Association="Self.FK_Material_0_0">
+            <End Role="LoanLength" EntitySet="LoanLengths" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Material_1_0" Association="Self.FK_Material_1_0">
+            <End Role="Patron" EntitySet="Patrons" />
+            <End Role="Material" EntitySet="Materials" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ILSDBModelStoreContainer" CdmEntityContainer="ILSDBEntities">
+          <EntitySetMapping Name="Checkouts">
+            <EntityTypeMapping TypeName="ILSDBModel.Checkout">
+              <MappingFragment StoreEntitySet="Checkout">
+                <ScalarProperty Name="materialID" ColumnName="materialID" />
+                <ScalarProperty Name="patronLibraryID" ColumnName="patronLibraryID" />
+                <ScalarProperty Name="returnDate" ColumnName="returnDate" />
+                <ScalarProperty Name="checkoutDate" ColumnName="checkoutDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoanLengths">
+            <EntityTypeMapping TypeName="ILSDBModel.LoanLength">
+              <MappingFragment StoreEntitySet="LoanLength">
+                <ScalarProperty Name="MaterialType" ColumnName="MaterialType" />
+                <ScalarProperty Name="LoanLength1" ColumnName="LoanLength" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materials">
+            <EntityTypeMapping TypeName="ILSDBModel.Material">
+              <MappingFragment StoreEntitySet="Material">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="patronLibraryID" ColumnName="patronLibraryID" />
+                <ScalarProperty Name="materialType" ColumnName="materialType" />
+                <ScalarProperty Name="materialLoanLength" ColumnName="materialLoanLength" />
+                <ScalarProperty Name="materialName" ColumnName="materialName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patrons">
+            <EntityTypeMapping TypeName="ILSDBModel.Patron">
+              <MappingFragment StoreEntitySet="Patron">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="patronFirstName" ColumnName="patronFirstName" />
+                <ScalarProperty Name="patronLastName" ColumnName="patronLastName" />
+                <ScalarProperty Name="patronEmail" ColumnName="patronEmail" />
+                <ScalarProperty Name="patronPhone" ColumnName="patronPhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
