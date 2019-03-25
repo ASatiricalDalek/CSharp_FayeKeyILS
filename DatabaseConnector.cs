@@ -92,6 +92,54 @@ namespace FayeKeyILS
             return patron;
         }
 
+        public void addPatron(string fname, string lname, string email, string phone)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Patron newPatron = new Patron();
+                newPatron.patronFirstName = fname;
+                newPatron.patronLastName = lname;
+                newPatron.patronEmail = email;
+                newPatron.patronPhone = phone;
+                newPatron.Id = generateId();
 
+                db.Patrons.Add(newPatron);
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
+
+        private long generateId()
+        {
+            // Count+1 only works as long as members aren't deleted from the list, which they are in this application
+            // This method will ensure that the new ID is always one greater than the highest ID currently in the database, whatever that may be
+
+            List<Patron> allPatron = new List<Patron>();
+            List<long> allIDs = new List<long>();
+            long newid;
+
+            allPatron = GetFullPatronInfo();
+
+            foreach (Patron pat in allPatron)
+            {
+                allIDs.Add(pat.Id);
+            }
+            if (allIDs.Count > 0)
+            {
+                newid = allIDs.Max() + 1;
+            }
+            else
+            {
+                // If the database is empty, the ID will start at 1
+                newid = 1;
+            }
+
+
+            return newid;
+        }
     }
 }
+
+
+            
+

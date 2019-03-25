@@ -44,5 +44,19 @@ namespace FayeKeyILS
             txt_UpdatePhone.Text = allPatrons[selectedPatronID - 1].patronPhone;
 
         }
+
+        private void btn_AddPatron_Click(object sender, EventArgs e)
+        {
+            string fName = txtFNameAdd.Text;
+            string lName = txtLNameAdd.Text;
+            string email = txtEmailAdd.Text;
+            string phone = txtPhoneAdd.Text;
+            dbc.addPatron(fName, lName, email, phone);
+            MessageBox.Show("Patron: "+fName+" "+lName+" was added!");
+            txtFNameAdd.Text = "";
+            txtLNameAdd.Text = "";
+            txtPhoneAdd.Text = "";
+            txtEmailAdd.Text = "";
+        }
     }
 }
