@@ -1,6 +1,6 @@
 ﻿namespace FayeKeyILS
 {
-    partial class Form1
+    partial class main
     {
         /// <summary>
         /// Required designer variable.
@@ -43,6 +43,10 @@
             this.slbl_ReturnSectionHeader = new System.Windows.Forms.Label();
             this.slbl_ReturnMaterialabel = new System.Windows.Forms.Label();
             this.btn_Return = new System.Windows.Forms.Button();
+            this.viewPatronsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPatronsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,15 +123,21 @@
             // 
             // patronToolStripMenuItem
             // 
+            this.patronToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewPatronsToolStripMenuItem,
+            this.addPatronsToolStripMenuItem});
             this.patronToolStripMenuItem.Name = "patronToolStripMenuItem";
-            this.patronToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.patronToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.patronToolStripMenuItem.Text = "Patron...";
             this.patronToolStripMenuItem.Click += new System.EventHandler(this.patronToolStripMenuItem_Click);
             // 
             // materialToolStripMenuItem
             // 
+            this.materialToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewMaterialsToolStripMenuItem,
+            this.addMaterialsToolStripMenuItem});
             this.materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-            this.materialToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.materialToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.materialToolStripMenuItem.Text = "Material...";
             // 
             // exitToolStripMenuItem
@@ -171,7 +181,34 @@
             this.btn_Return.Text = "Return";
             this.btn_Return.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // viewPatronsToolStripMenuItem
+            // 
+            this.viewPatronsToolStripMenuItem.Name = "viewPatronsToolStripMenuItem";
+            this.viewPatronsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewPatronsToolStripMenuItem.Text = "View Patrons";
+            this.viewPatronsToolStripMenuItem.Click += new System.EventHandler(this.viewPatronsToolStripMenuItem_Click);
+            // 
+            // addPatronsToolStripMenuItem
+            // 
+            this.addPatronsToolStripMenuItem.Name = "addPatronsToolStripMenuItem";
+            this.addPatronsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addPatronsToolStripMenuItem.Text = "Add Patrons";
+            this.addPatronsToolStripMenuItem.Click += new System.EventHandler(this.addPatronsToolStripMenuItem_Click);
+            // 
+            // viewMaterialsToolStripMenuItem
+            // 
+            this.viewMaterialsToolStripMenuItem.Name = "viewMaterialsToolStripMenuItem";
+            this.viewMaterialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewMaterialsToolStripMenuItem.Text = "View Materials";
+            this.viewMaterialsToolStripMenuItem.Click += new System.EventHandler(this.viewMaterialsToolStripMenuItem_Click);
+            // 
+            // addMaterialsToolStripMenuItem
+            // 
+            this.addMaterialsToolStripMenuItem.Name = "addMaterialsToolStripMenuItem";
+            this.addMaterialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addMaterialsToolStripMenuItem.Text = "Add Materials";
+            // 
+            // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -188,7 +225,7 @@
             this.Controls.Add(this.slbl_CheckoutSectionHeader);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "main";
             this.Text = "Faye Key ILS";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -215,6 +252,10 @@
         private System.Windows.Forms.Label slbl_ReturnSectionHeader;
         private System.Windows.Forms.Label slbl_ReturnMaterialabel;
         private System.Windows.Forms.Button btn_Return;
+        private System.Windows.Forms.ToolStripMenuItem viewPatronsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPatronsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewMaterialsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addMaterialsToolStripMenuItem;
     }
 }
 
