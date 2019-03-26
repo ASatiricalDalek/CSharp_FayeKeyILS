@@ -14,7 +14,7 @@ For instance, clicking on a patron will list all the items they have checked out
 The system will also allow for the creation of new items and patrons. 
 
 <h1>Team Members</h1>
-Hongjia Che
-John Gaffney
-Robert Kazirut
+Hongjia Che<br>
+John Gaffney<br>
+Robert Kazirut<br>
 Connor McNamara
