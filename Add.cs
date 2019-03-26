@@ -20,14 +20,8 @@ namespace FayeKeyILS
 
         private void Add_Load(object sender, EventArgs e)
         {
-            List<long> removePatronIDs = new List<long>();
-            List<Patron> modifyPatronIDs = new List<Patron>();
-
-            removePatronIDs = dbc.GetPatronID();
-            modifyPatronIDs = dbc.GetFullPatronInfo();
-
-            cmb_RemovePatronSelector.DataSource = removePatronIDs;
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
+            rebuildRemoveCombo();
+            rebuildUpdateCombo();
             cmb_UpdateLibraryID.DisplayMember = "Id";
         }
 
@@ -62,22 +56,24 @@ namespace FayeKeyILS
             string lName = txtLNameAdd.Text; //get last name
             string email = txtEmailAdd.Text; //get email
             string phone = txtPhoneAdd.Text; //get phone
-            dbc.addPatron(fName, lName, email, phone); //add to db
-            MessageBox.Show("Patron: "+fName+" "+lName+" was added!"); //success message
 
-            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
-            List<Patron> modifyPatronIDs = new List<Patron>();
-            removePatronIDs = dbc.GetPatronID(); //              **
-            modifyPatronIDs = dbc.GetFullPatronInfo();
-            cmb_RemovePatronSelector.DataSource = removePatronIDs; //reload combo box
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
-            cmb_RemovePatronSelector.SelectedIndex = 0;  //select first member of combo box
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
+            if (String.IsNullOrEmpty(fName) == false && String.IsNullOrEmpty(lName) == false)
+            {
+                dbc.addPatron(fName, lName, email, phone); //add to db
+                MessageBox.Show("Patron: " + fName + " " + lName + " was added!"); //success message
 
-            txtFNameAdd.Text = ""; // reset these fields to empty string
-            txtLNameAdd.Text = "";
-            txtPhoneAdd.Text = "";
-            txtEmailAdd.Text = "";
+                rebuildUpdateCombo();
+                rebuildRemoveCombo();
+
+                txtFNameAdd.Text = ""; // reset these fields to empty string
+                txtLNameAdd.Text = "";
+                txtPhoneAdd.Text = "";
+                txtEmailAdd.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("Please check that 'First Name' and 'Last Name' fields are not empty.");
+            }
         }
 
         private void btn_RemovePatron_Click(object sender, EventArgs e)
@@ -88,12 +84,9 @@ namespace FayeKeyILS
 
             List<long> removePatronIDs = new List<long>(); //repopulate combo box list
             List<Patron> modifyPatronIDs = new List<Patron>();
-            removePatronIDs = dbc.GetPatronID(); //              **
-            modifyPatronIDs = dbc.GetFullPatronInfo();
-            cmb_RemovePatronSelector.DataSource = removePatronIDs; //reload combo box
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
-            cmb_RemovePatronSelector.SelectedIndex = 0;  //select first member of combo box
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
+            rebuildRemoveCombo();
+            rebuildUpdateCombo();
+
         }
 
         private void btn_UpdatePatron_Click(object sender, EventArgs e)
@@ -103,19 +96,38 @@ namespace FayeKeyILS
             string lName = txt_UpdateLName.Text; //get last name
             string email = txt_UpdateEmail.Text; //get email
             string phone = txt_UpdatePhone.Text; //get phone
-            dbc.updatePatron(selectedPatron.Id, fName, lName, email, phone);
-            MessageBox.Show("Update information for " + fName + " " + lName + " was successful!");
+            if (String.IsNullOrEmpty(fName) == false && String.IsNullOrEmpty(lName) == false)
+            {
+                dbc.updatePatron(selectedPatron.Id, fName, lName, email, phone);
+                MessageBox.Show("Update information for " + fName + " " + lName + " was successful!");
+                rebuildUpdateCombo();
+            }
+            else
+            {
+                MessageBox.Show("Please check that 'First Name' and 'Last Name' fields are not empty.");
+                rebuildUpdateCombo();
+            }
 
-            List<Patron> modifyPatronIDs = new List<Patron>();
-            modifyPatronIDs = dbc.GetFullPatronInfo();
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
-            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
         }
 
         private void btnViewData_Click(object sender, EventArgs e)
         {
             Form viewPatron = new Views();
             viewPatron.Show();
+        }
+
+        private void rebuildUpdateCombo()
+        {
+            List<Patron> modifyPatronIDs = new List<Patron>();
+            modifyPatronIDs = dbc.GetFullPatronInfo();
+            cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
+        }
+
+        private void rebuildRemoveCombo()
+        {
+            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
+            removePatronIDs = dbc.GetPatronID();
+            cmb_RemovePatronSelector.DataSource = removePatronIDs;
         }
     }
 }
