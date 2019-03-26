@@ -55,14 +55,33 @@ namespace FayeKeyILS
         private void btn_Checkout_Click(object sender, EventArgs e)
         {
             //NEED TO FINISH
-            if (Checkout.Any(i => i.materialID == mId) == false)
+            // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/how-to-convert-a-string-to-a-number
+            long processedMaterialId, processedPatronId;
+            try
             {
-                dbc.checkoutMaterial(mId, pID);
-            }
-            else
-            {
+                // Long is Int64
+                processedMaterialId = Convert.ToInt64(txt_MaterialID.Text);
+                processedPatronId = Convert.ToInt64(txt_LibraryID.Text);
 
+                List<Checkout> allCheckouts = dbc.GetFullCheckoutInfo();
+                List<Patron> allPatrons = dbc.GetFullPatronInfo();
+                if (allCheckouts.Any(i => i.materialID == processedMaterialId) == false)
+                {
+                    if (allPatrons.Any(i => i.Id == processedPatronId) == true)
+                    {
+                        dbc.checkoutMaterial(processedMaterialId, processedPatronId);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error: Item already checked out");
+                }
             }
+            catch (FormatException)
+            {
+                MessageBox.Show("Error: Please enter a numeric value for both Patron and Material ID");
+            }
+
         }
     }
 }

@@ -21,7 +21,7 @@ namespace FayeKeyILS
         }
     
         public long Id { get; set; }
-        public long patronLibraryID { get; set; }
+        public Nullable<long> patronLibraryID { get; set; }
         public string materialType { get; set; }
         public long materialLoanLength { get; set; }
         public string materialName { get; set; }

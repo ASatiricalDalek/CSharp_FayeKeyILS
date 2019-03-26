@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="6c68d1b9b7da4bfb9420d92ea32c8799" Name="Diagram1">
-        <EntityTypeShape EntityType="ILSDBModel.Checkout" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ILSDBModel.LoanLength" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ILSDBModel.Material" Width="1.5" PointX="6" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ILSDBModel.Patron" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
-        <AssociationConnector Association="ILSDBModel.FK_Checkout_0_0" ManuallyRouted="false" />
-        <AssociationConnector Association="ILSDBModel.FK_Checkout_1_0" ManuallyRouted="false" />
-        <AssociationConnector Association="ILSDBModel.FK_Material_0_0" ManuallyRouted="false" />
-        <AssociationConnector Association="ILSDBModel.FK_Material_1_0" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ILSDBModel.Checkout" Width="1.5" PointX="5.25" PointY="3.5" />
+        <EntityTypeShape EntityType="ILSDBModel.LoanLength" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ILSDBModel.Material" Width="1.5" PointX="3" PointY="3.25" />
+        <EntityTypeShape EntityType="ILSDBModel.Patron" Width="1.5" PointX="0.75" PointY="3.375" />
+        <AssociationConnector Association="ILSDBModel.FK_Checkout_0_0" />
+        <AssociationConnector Association="ILSDBModel.FK_Checkout_1_0" />
+        <AssociationConnector Association="ILSDBModel.FK_Material_1_0" />
+        <AssociationConnector Association="ILSDBModel.FK_Material_0_0" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

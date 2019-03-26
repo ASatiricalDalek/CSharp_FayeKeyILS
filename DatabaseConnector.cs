@@ -70,26 +70,35 @@ namespace FayeKeyILS
 
         public List<Patron> GetFullPatronInfo()
         {
-            List<long> id = new List<long>();
-            List<string> fName = new List<string>();
-            List<string> lName = new List<string>();
-            List<string> email = new List<string>();
-            List<string> phone = new List<string>();
+            //List<long> id = new List<long>();
+            //List<string> fName = new List<string>();
+            //List<string> lName = new List<string>();
+            //List<string> email = new List<string>();
+            //List<string> phone = new List<string>();
 
-            List<Patron> patron = new List<Patron>();
+            //List<Patron> patron = new List<Patron>();
 
-            id = GetPatronID();
-            fName = GetPatronFirstName();
-            lName = GetPatronLastName();
-            email = GetPatronEmail();
-            phone = GetPatronPhone();
+            //id = GetPatronID();
+            //fName = GetPatronFirstName();
+            //lName = GetPatronLastName();
+            //email = GetPatronEmail();
+            //phone = GetPatronPhone();
 
-            for (int i = 0; i < fName.Count(); i++)
+            //for (int i = 0; i < fName.Count(); i++)
+            //{
+            //    patron.Add(new Patron { Id = id[i], patronFirstName = fName[i], patronLastName = lName[i], patronEmail = email[i], patronPhone = phone[i] });
+            //}
+
+            //return patron;
+
+            List<Patron> allPatrons = new List<Patron>();
+
+            using (var db = new ILSDBEntities())
             {
-                patron.Add(new Patron { Id = id[i], patronFirstName = fName[i], patronLastName = lName[i], patronEmail = email[i], patronPhone = phone[i] });
+                allPatrons = db.Patrons.ToList();
             }
 
-            return patron;
+            return allPatrons;
         }
         /// <summary>
         /// Add a patron
@@ -179,41 +188,46 @@ namespace FayeKeyILS
         {
             using(var db = new ILSDBEntities())
             {
+                DateTime currentDate, returnDate;
+                string currentMaterialType;
+
+                // Load the currently selected material into a variable
+                List<Material> currentMaterial = db.Materials.Where(i => i.Id == mId).ToList();
+                currentMaterialType = currentMaterial[0].materialType;
+                // Look up and load the entry for this material type's loan length
+                List<LoanLength> loanLengthEntry = db.LoanLengths.Where(l => l.MaterialType == currentMaterialType).ToList();
+                
                 List<Checkout> allCheckouts = new List<Checkout>();
-                allCheckouts = GetFullCheckoutInfo();
+                currentDate = DateTime.Now;
+                returnDate = currentDate.AddDays(loanLengthEntry[0].LoanLength1);
+
                 Checkout currentCheckout = new Checkout
                 {
                     materialID = mId,
                     patronLibraryID = pId,
-                    returnDate = 0,
-                    checkoutDate = 0
+                    returnDate = returnDate.ToString("MM/dd/yyyy"),
+                    checkoutDate = currentDate.ToString("MM/dd/yyyy")
                 };
+                // Add the checkout to the checkout table
                 db.Checkouts.Add(currentCheckout);
+                // Associate the patron checking out ID with the material record
+                currentMaterial[0].patronLibraryID = pId;
+                // Save changes
                 db.SaveChanges();
                 db.Dispose();
             }
         }
 
-        public List<Patron> GetFullCheckoutInfo()
+        public List<Checkout> GetFullCheckoutInfo()
         {
-            List<long> mID = new List<long>();
-            List<long> pID = new List<long>();
-            List<DateTime> returnDate = new List<DateTime>();
-            List<DateTime> checkoutDate = new List<DateTime>();
-            List<Checkout> checkout = new List<Checkout>();
+            List<Checkout> allCheckouts = new List<Checkout>();
 
-
-            mID = GetMaterialID();
-            pID = GetPatronID();
-            returnDate = GetReturnDate();
-            checkoutDate = GetCheckoutDate();
-
-            for (int i = 0; i < fName.Count(); i++)
+            using (var db = new ILSDBEntities())
             {
-                checkout.Add(new Checkout { materialID = mID[i], patronLibraryID = pID[i], returnDate = returnDate[i], checkoutDate = checkoutDate[i] });
+                allCheckouts = db.Checkouts.ToList();
             }
 
-            return checkout;
+            return allCheckouts;
         }
     }
 }
