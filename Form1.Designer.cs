@@ -64,7 +64,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(24, 154);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(6);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(340, 31);
             this.textBox1.TabIndex = 1;
@@ -82,7 +82,7 @@
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(24, 223);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(6);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(340, 31);
             this.textBox2.TabIndex = 3;
@@ -100,12 +100,13 @@
             // btn_Checkout
             // 
             this.btn_Checkout.Location = new System.Drawing.Point(320, 363);
-            this.btn_Checkout.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btn_Checkout.Margin = new System.Windows.Forms.Padding(6);
             this.btn_Checkout.Name = "btn_Checkout";
             this.btn_Checkout.Size = new System.Drawing.Size(150, 44);
             this.btn_Checkout.TabIndex = 5;
             this.btn_Checkout.Text = "Checkout";
             this.btn_Checkout.UseVisualStyleBackColor = true;
+            this.btn_Checkout.Click += new System.EventHandler(this.btn_Checkout_Click);
             // 
             // menuStrip1
             // 
@@ -184,7 +185,7 @@
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(648, 152);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(6);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(280, 31);
             this.textBox3.TabIndex = 7;
@@ -213,7 +214,7 @@
             // btn_Return
             // 
             this.btn_Return.Location = new System.Drawing.Point(882, 363);
-            this.btn_Return.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btn_Return.Margin = new System.Windows.Forms.Padding(6);
             this.btn_Return.Name = "btn_Return";
             this.btn_Return.Size = new System.Drawing.Size(150, 44);
             this.btn_Return.TabIndex = 10;
@@ -238,7 +239,7 @@
             this.Controls.Add(this.slbl_CheckoutSectionHeader);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "main";
             this.Text = "Faye Key ILS";
             this.Load += new System.EventHandler(this.Form1_Load);

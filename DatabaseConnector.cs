@@ -174,6 +174,47 @@ namespace FayeKeyILS
 
             return newid;
         }
+
+        public void checkoutMaterial(long mId, long pId)
+        {
+            using(var db = new ILSDBEntities())
+            {
+                List<Checkout> allCheckouts = new List<Checkout>();
+                allCheckouts = GetFullCheckoutInfo();
+                Checkout currentCheckout = new Checkout
+                {
+                    materialID = mId,
+                    patronLibraryID = pId,
+                    returnDate = 0,
+                    checkoutDate = 0
+                };
+                db.Checkouts.Add(currentCheckout);
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
+
+        public List<Patron> GetFullCheckoutInfo()
+        {
+            List<long> mID = new List<long>();
+            List<long> pID = new List<long>();
+            List<DateTime> returnDate = new List<DateTime>();
+            List<DateTime> checkoutDate = new List<DateTime>();
+            List<Checkout> checkout = new List<Checkout>();
+
+
+            mID = GetMaterialID();
+            pID = GetPatronID();
+            returnDate = GetReturnDate();
+            checkoutDate = GetCheckoutDate();
+
+            for (int i = 0; i < fName.Count(); i++)
+            {
+                checkout.Add(new Checkout { materialID = mID[i], patronLibraryID = pID[i], returnDate = returnDate[i], checkoutDate = checkoutDate[i] });
+            }
+
+            return checkout;
+        }
     }
 }
 

@@ -13,6 +13,7 @@ namespace FayeKeyILS
 {
     public partial class main : Form
     {
+        DatabaseConnector dbc = new DatabaseConnector();
         public main()
         {
             InitializeComponent();
@@ -49,6 +50,19 @@ namespace FayeKeyILS
         private void btn_Return_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btn_Checkout_Click(object sender, EventArgs e)
+        {
+            //NEED TO FINISH
+            if (Checkout.Any(i => i.materialID == mId) == false)
+            {
+                dbc.checkoutMaterial(mId, pID);
+            }
+            else
+            {
+
+            }
         }
     }
 }
