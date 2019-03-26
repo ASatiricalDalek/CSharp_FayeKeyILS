@@ -59,5 +59,12 @@ namespace FayeKeyILS
             }
 
         }
+
+        private void lst_Patrons_Format(object sender, ListControlConvertEventArgs e)
+        {
+            string fName = ((Patron)e.ListItem).patronFirstName.ToString();
+            string lName = ((Patron)e.ListItem).patronLastName.ToString();
+            e.Value = fName + " " + lName;
+        }
     }
 }
