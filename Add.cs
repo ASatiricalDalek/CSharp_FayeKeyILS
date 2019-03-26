@@ -111,5 +111,11 @@ namespace FayeKeyILS
             cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
             cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
         }
+
+        private void btnViewData_Click(object sender, EventArgs e)
+        {
+            Form viewPatron = new Views();
+            viewPatron.Show();
+        }
     }
 }

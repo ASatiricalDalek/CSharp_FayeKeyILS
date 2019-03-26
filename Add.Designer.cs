@@ -53,6 +53,7 @@
             this.cmb_RemovePatronSelector = new System.Windows.Forms.ComboBox();
             this.btn_RemovePatron = new System.Windows.Forms.Button();
             this.slbl_Remove = new System.Windows.Forms.Label();
+            this.btnViewData = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // slbl_AddPatronLabel
@@ -293,11 +294,23 @@
             this.slbl_Remove.TabIndex = 27;
             this.slbl_Remove.Text = "Remove Patron...";
             // 
+            // btnViewData
+            // 
+            this.btnViewData.Location = new System.Drawing.Point(365, 789);
+            this.btnViewData.Margin = new System.Windows.Forms.Padding(6);
+            this.btnViewData.Name = "btnViewData";
+            this.btnViewData.Size = new System.Drawing.Size(380, 44);
+            this.btnViewData.TabIndex = 28;
+            this.btnViewData.Text = "View Patron Listing";
+            this.btnViewData.UseVisualStyleBackColor = true;
+            this.btnViewData.Click += new System.EventHandler(this.btnViewData_Click);
+            // 
             // Add
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1154, 1019);
+            this.Controls.Add(this.btnViewData);
             this.Controls.Add(this.slbl_Remove);
             this.Controls.Add(this.btn_RemovePatron);
             this.Controls.Add(this.cmb_RemovePatronSelector);
@@ -358,5 +371,6 @@
         private System.Windows.Forms.ComboBox cmb_RemovePatronSelector;
         private System.Windows.Forms.Button btn_RemovePatron;
         private System.Windows.Forms.Label slbl_Remove;
+        private System.Windows.Forms.Button btnViewData;
     }
 }
