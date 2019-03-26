@@ -115,7 +115,10 @@ namespace FayeKeyILS
                 db.Dispose();
             }
         }
-
+        /// <summary>
+        /// Removes selected patron
+        /// </summary>
+        /// <param name="pId">Selected patron id</param>
         public void removePatron(long pId)
         {
             using(var db = new ILSDBEntities())
