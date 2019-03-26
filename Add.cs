@@ -56,7 +56,7 @@ namespace FayeKeyILS
             string lName = txtLNameAdd.Text; //get last name
             string email = txtEmailAdd.Text; //get email
             string phone = txtPhoneAdd.Text; //get phone
-
+            //data validation
             if (String.IsNullOrEmpty(fName) == false && String.IsNullOrEmpty(lName) == false)
             {
                 dbc.addPatron(fName, lName, email, phone); //add to db
@@ -81,9 +81,6 @@ namespace FayeKeyILS
             string id = cmb_RemovePatronSelector.SelectedValue.ToString(); //get selected id
             dbc.removePatron(Convert.ToInt64(id)); //remove patron
             MessageBox.Show("Patron with ID: " + id + " was successfully removed!"); //success message
-
-            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
-            List<Patron> modifyPatronIDs = new List<Patron>();
             rebuildRemoveCombo();
             rebuildUpdateCombo();
 
@@ -96,6 +93,7 @@ namespace FayeKeyILS
             string lName = txt_UpdateLName.Text; //get last name
             string email = txt_UpdateEmail.Text; //get email
             string phone = txt_UpdatePhone.Text; //get phone
+            //data validation
             if (String.IsNullOrEmpty(fName) == false && String.IsNullOrEmpty(lName) == false)
             {
                 dbc.updatePatron(selectedPatron.Id, fName, lName, email, phone);
@@ -112,20 +110,20 @@ namespace FayeKeyILS
 
         private void btnViewData_Click(object sender, EventArgs e)
         {
-            Form viewPatron = new Views();
+            Form viewPatron = new Views(); //shows view form
             viewPatron.Show();
         }
 
         private void rebuildUpdateCombo()
         {
-            List<Patron> modifyPatronIDs = new List<Patron>();
+            List<Patron> modifyPatronIDs = new List<Patron>(); //repopulate update combo box list
             modifyPatronIDs = dbc.GetFullPatronInfo();
             cmb_UpdateLibraryID.DataSource = modifyPatronIDs;
         }
 
         private void rebuildRemoveCombo()
         {
-            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
+            List<long> removePatronIDs = new List<long>(); //repopulate remove combo box list
             removePatronIDs = dbc.GetPatronID();
             cmb_RemovePatronSelector.DataSource = removePatronIDs;
         }
