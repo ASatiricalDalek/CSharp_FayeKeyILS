@@ -21,26 +21,43 @@ namespace FayeKeyILS
 
         private void Views_Load(object sender, EventArgs e)
         {
-            List<string> patrons = new List<string>();
+            List<Patron> patrons = new List<Patron>();
 
             // TODO: Create actual FullName property in the Patron object so it can be displayed everywhere, like here.
-            patrons = dbc.GetPatronFirstName();
+            patrons = dbc.GetFullPatronInfo();
             // Populates listbox with patron info from DB
             lst_Patrons.DataSource = patrons;
+            lst_Patrons.DisplayMember = "patronFirstName";
         }
 
         private void lst_Patrons_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Same principle as the update patron fields in Add.cs
             List<Patron> allPatrons = new List<Patron>();
-            int selectedPatronID = lst_Patrons.SelectedIndex;
+            Patron selectedPatron = (Patron)lst_Patrons.SelectedItem;
 
             allPatrons = dbc.GetFullPatronInfo();
 
-            lbl_PatronID.Text = allPatrons[selectedPatronID].Id.ToString();
-            lbl_Name.Text = allPatrons[selectedPatronID].patronFirstName + " " + allPatrons[selectedPatronID].patronLastName;
-            lbl_email.Text = allPatrons[selectedPatronID].patronEmail;
-            lbl_phone.Text = allPatrons[selectedPatronID].patronPhone;
+            lbl_PatronID.Text = selectedPatron.Id.ToString();
+            lbl_Name.Text = selectedPatron.patronFirstName.ToString() + " " + selectedPatron.patronLastName.ToString();
+
+            if (selectedPatron.patronEmail == null)
+            {
+                lbl_email.Text = "";
+            }
+            else
+            {
+                lbl_email.Text = selectedPatron.patronEmail.ToString();
+            }
+            if (selectedPatron.patronPhone == null)
+            {
+                lbl_phone.Text = "";
+            }
+            else
+            {
+                lbl_phone.Text = selectedPatron.patronPhone.ToString();
+            }
+
         }
     }
 }

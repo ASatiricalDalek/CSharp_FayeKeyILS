@@ -91,25 +91,45 @@ namespace FayeKeyILS
 
             return patron;
         }
-
+        /// <summary>
+        /// Add a patron
+        /// </summary>
+        /// <param name="fname">Patron First Name</param>
+        /// <param name="lname">Patron Last Name</param>
+        /// <param name="email">Patron Email</param>
+        /// <param name="phone">Patron Phone Number</param>
         public void addPatron(string fname, string lname, string email, string phone)
         {
             using (var db = new ILSDBEntities())
             {
-                Patron newPatron = new Patron();
-                newPatron.patronFirstName = fname;
-                newPatron.patronLastName = lname;
-                newPatron.patronEmail = email;
-                newPatron.patronPhone = phone;
-                newPatron.Id = generateId();
-
+                Patron newPatron = new Patron
+                {
+                    patronFirstName = fname,
+                    patronLastName = lname,
+                    patronEmail = email,
+                    patronPhone = phone,
+                    Id = generatePatronId()
+                };
                 db.Patrons.Add(newPatron);
                 db.SaveChanges();
                 db.Dispose();
             }
         }
 
-        private long generateId()
+        public void removePatron(long pId)
+        {
+            using(var db = new ILSDBEntities())
+            {
+                Patron r = db.Patrons.First(i => i.Id == pId);
+                db.Patrons.Attach(r);
+                db.Patrons.Remove(r);
+                db.SaveChanges();
+                db.Dispose();
+            }
+            
+        }
+
+        private long generatePatronId()
         {
             // Count+1 only works as long as members aren't deleted from the list, which they are in this application
             // This method will ensure that the new ID is always one greater than the highest ID currently in the database, whatever that may be

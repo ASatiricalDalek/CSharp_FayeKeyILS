@@ -47,16 +47,31 @@ namespace FayeKeyILS
 
         private void btn_AddPatron_Click(object sender, EventArgs e)
         {
-            string fName = txtFNameAdd.Text;
-            string lName = txtLNameAdd.Text;
-            string email = txtEmailAdd.Text;
-            string phone = txtPhoneAdd.Text;
-            dbc.addPatron(fName, lName, email, phone);
-            MessageBox.Show("Patron: "+fName+" "+lName+" was added!");
-            txtFNameAdd.Text = "";
+            string fName = txtFNameAdd.Text; //get first name
+            string lName = txtLNameAdd.Text; //get last name
+            string email = txtEmailAdd.Text; //get email
+            string phone = txtPhoneAdd.Text; //get phone
+            dbc.addPatron(fName, lName, email, phone); //add to db
+            MessageBox.Show("Patron: "+fName+" "+lName+" was added!"); //success message
+            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
+            removePatronIDs = dbc.GetPatronID(); //            **
+            cmb_RemovePatronSelector.DataSource = removePatronIDs; //reload combo box
+            txtFNameAdd.Text = ""; // reset these fields to empty string
             txtLNameAdd.Text = "";
             txtPhoneAdd.Text = "";
             txtEmailAdd.Text = "";
+        }
+
+        private void btn_RemovePatron_Click(object sender, EventArgs e)
+        {           
+            string id = cmb_RemovePatronSelector.SelectedValue.ToString(); //get selected id
+            dbc.removePatron(Convert.ToInt64(id)); //remove patron
+            MessageBox.Show("Patron with ID: " + id + " was successfully removed!"); //success message
+            List<long> removePatronIDs = new List<long>(); //repopulate combo box list
+            removePatronIDs = dbc.GetPatronID(); //              **
+            cmb_RemovePatronSelector.DataSource = removePatronIDs; //reload combo box
+            cmb_RemovePatronSelector.SelectedIndex = 0;  //select first member of combo box
+            
         }
     }
 }

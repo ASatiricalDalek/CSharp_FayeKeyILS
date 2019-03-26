@@ -280,6 +280,7 @@
             this.btn_RemovePatron.TabIndex = 26;
             this.btn_RemovePatron.Text = "Remove Patron";
             this.btn_RemovePatron.UseVisualStyleBackColor = true;
+            this.btn_RemovePatron.Click += new System.EventHandler(this.btn_RemovePatron_Click);
             // 
             // slbl_Remove
             // 
