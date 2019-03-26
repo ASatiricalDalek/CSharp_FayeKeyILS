@@ -158,6 +158,7 @@
             this.btn_UpdatePatron.TabIndex = 23;
             this.btn_UpdatePatron.Text = "Update Patron";
             this.btn_UpdatePatron.UseVisualStyleBackColor = true;
+            this.btn_UpdatePatron.Click += new System.EventHandler(this.btn_UpdatePatron_Click);
             // 
             // label1
             // 

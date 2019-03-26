@@ -131,6 +131,20 @@ namespace FayeKeyILS
             }
             
         }
+        
+        public void updatePatron(long pId, string fname, string lname, string email, string phone)
+        {
+            using(var db = new ILSDBEntities())
+            {
+                Patron u = db.Patrons.First(i => i.Id == pId);
+                u.patronFirstName = fname;
+                u.patronLastName = lname;
+                u.patronEmail = email;
+                u.patronPhone = phone;
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
 
         private long generatePatronId()
         {
