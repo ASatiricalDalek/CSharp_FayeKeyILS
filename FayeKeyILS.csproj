@@ -72,6 +72,12 @@
     <Compile Include="Add.Designer.cs">
       <DependentUpon>Add.cs</DependentUpon>
     </Compile>
+    <Compile Include="Addmaterial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Addmaterial.Designer.cs">
+      <DependentUpon>Addmaterial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Checkout.cs">
       <DependentUpon>ILSDBModel.tt</DependentUpon>
     </Compile>

@@ -44,5 +44,15 @@ namespace FayeKeyILS
             txt_UpdatePhone.Text = allPatrons[selectedPatronID - 1].patronPhone;
 
         }
+
+        private void btn_UpdatePatron_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_AddPatron_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

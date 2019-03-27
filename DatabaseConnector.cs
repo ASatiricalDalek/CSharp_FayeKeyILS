@@ -91,7 +91,64 @@ namespace FayeKeyILS
 
             return patron;
         }
+        public partial class material
+        {
+            public string materialType { get; set; }
+            public string materialName { get; set; }
+        }
+
+        public void Addmaterial(string materialType, string materialName)
+        {
+            using (var db = new MembersListEntities())
+            {
+                List<string> target = new List<string>();
+                target = (from mems in db.members select mems.materialName).ToList();
+
+
+                for (int i = 0; i < target.Count(); i++)
+                {
+                    if (target[i] == materialName)
+                    {
+                        string message = "Already Exist";
+                        string title = "Attention";
+                        MessageBox.Show(message, title);
+                        return;
+                    }
+                }
+
+                material newMember = new material
+                {
+                    // ID of every new object is one more than the ID of the last object in the table
+                    materialName = materialName,
+                    materialType = materialType
+                };
+
+                db.members.Add(newMember);
+                db.SaveChanges();
+                db.Dispose(); // I believe the "using" statement renders this redundant but hey, YouTube said so
+            }
+
+        }
+
+        public void removeMaterial(string materialName)
+        {
+            using (var db = new MembersListEntities())
+            {
+                material m = db.members.First(i => i.materialName == materialName);
+                db.members.Attach(m);
+                db.members.Remove(m);
+                db.SaveChanges();
+
+            }
+
+        }
+
 
 
     }
 }
+
+
+
+
+
