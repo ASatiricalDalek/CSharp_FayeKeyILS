@@ -70,27 +70,6 @@ namespace FayeKeyILS
 
         public List<Patron> GetFullPatronInfo()
         {
-            //List<long> id = new List<long>();
-            //List<string> fName = new List<string>();
-            //List<string> lName = new List<string>();
-            //List<string> email = new List<string>();
-            //List<string> phone = new List<string>();
-
-            //List<Patron> patron = new List<Patron>();
-
-            //id = GetPatronID();
-            //fName = GetPatronFirstName();
-            //lName = GetPatronLastName();
-            //email = GetPatronEmail();
-            //phone = GetPatronPhone();
-
-            //for (int i = 0; i < fName.Count(); i++)
-            //{
-            //    patron.Add(new Patron { Id = id[i], patronFirstName = fName[i], patronLastName = lName[i], patronEmail = email[i], patronPhone = phone[i] });
-            //}
-
-            //return patron;
-
             List<Patron> allPatrons = new List<Patron>();
 
             using (var db = new ILSDBEntities())
@@ -155,6 +134,10 @@ namespace FayeKeyILS
             }
         }
 
+        /// <summary>
+        /// Generates a new, unique, sequential patron ID
+        /// </summary>
+        /// <returns>Unique patron ID of type long</returns>
         private long generatePatronId()
         {
             // Count+1 only works as long as members aren't deleted from the list, which they are in this application
@@ -184,13 +167,19 @@ namespace FayeKeyILS
             return newid;
         }
 
+        /// <summary>
+        /// Performs a checkout by updating the checkout table with the patron ID, Material ID, return date, and checkout date
+        /// Also adds the patron ID to the material's entry on the material table as a foreign key
+        /// </summary>
+        /// <param name="mId">Material ID to uniquely identify the material</param>
+        /// <param name="pId">Patron ID to uniquely identify the patron</param>
         public void checkoutMaterial(long mId, long pId)
         {
             using(var db = new ILSDBEntities())
             {
                 DateTime currentDate, returnDate;
                 string currentMaterialType;
-
+                // Queries must be converted to lists, even if the query will only return one value
                 // Load the currently selected material into a variable
                 List<Material> currentMaterial = db.Materials.Where(i => i.Id == mId).ToList();
                 currentMaterialType = currentMaterial[0].materialType;
@@ -199,6 +188,7 @@ namespace FayeKeyILS
                 
                 List<Checkout> allCheckouts = new List<Checkout>();
                 currentDate = DateTime.Now;
+                // Since ID is the primary key, there will only ever be one entry in the list
                 returnDate = currentDate.AddDays(loanLengthEntry[0].LoanLength1);
 
                 Checkout currentCheckout = new Checkout
@@ -218,6 +208,10 @@ namespace FayeKeyILS
             }
         }
 
+        /// <summary>
+        /// Gets the entire checkout table
+        /// </summary>
+        /// <returns>List of all checkouts</returns>
         public List<Checkout> GetFullCheckoutInfo()
         {
             List<Checkout> allCheckouts = new List<Checkout>();
@@ -228,6 +222,34 @@ namespace FayeKeyILS
             }
 
             return allCheckouts;
+        }
+
+        /// <summary>
+        /// Returns an item by removing it from the checkout table and stripping the patron ID from the materials table
+        /// </summary>
+        /// <param name="mId">Material ID that uniquely identifies the material you want to return</param>
+        public void Return(long mId)
+        {
+            List<Checkout> allCheckouts = GetFullCheckoutInfo();
+            long pId;
+
+            if (allCheckouts.Any(i => i.materialID == mId) == true)
+            {
+                using (var db = new ILSDBEntities())
+                {
+                    // Remove entry from checkout table
+                    Checkout chk = db.Checkouts.First(c => c.materialID == mId);
+                    pId = chk.patronLibraryID;
+                    db.Checkouts.Attach(chk);
+                    db.Checkouts.Remove(chk);
+
+                    // Remove library ID from field 
+                    Material mat = db.Materials.First(m => m.patronLibraryID == pId);
+                    mat.patronLibraryID = null;
+
+                    db.SaveChanges();
+                }
+            }
         }
     }
 }
