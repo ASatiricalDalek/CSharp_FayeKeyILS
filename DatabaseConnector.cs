@@ -253,6 +253,29 @@ namespace FayeKeyILS
             return checkoutRecord;
         }
 
+        public List<Material> GetFullMaterialRecord(long materialID)
+        {
+            List<Material> fullMaterial = new List<Material>();
+
+            using (var db = new ILSDBEntities())
+            {
+                fullMaterial = db.Materials.ToList();
+            }
+
+            return fullMaterial;
+        }
+
+        public int GetLoanLength(long materialID)
+        {
+            Material mat = new Material();
+            using (var db = new ILSDBEntities())
+            {
+                mat = db.Materials.First(i => i.Id == materialID);
+            }
+
+            return Convert.ToInt32(mat.materialLoanLength);
+        }
+
         /// <summary>
         /// Returns an item by removing it from the checkout table and stripping the patron ID from the materials table
         /// </summary>
@@ -278,6 +301,23 @@ namespace FayeKeyILS
 
                     db.SaveChanges();
                 }
+            }
+        }
+
+        public void Renew(long mId)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Checkout currentOut = db.Checkouts.First(i => i.materialID == mId);
+                DateTime currentReturn, newReturn;
+                int length = GetLoanLength(mId);
+
+                currentReturn = DateTime.ParseExact(currentOut.returnDate, "MM/dd/yyyy", null);
+                newReturn = currentReturn.AddDays(length);
+
+                currentOut.returnDate = newReturn.ToString("MM/dd/yyyy");
+                db.SaveChanges();
+
             }
         }
     }

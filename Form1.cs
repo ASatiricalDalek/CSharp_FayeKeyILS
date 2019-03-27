@@ -71,7 +71,7 @@ namespace FayeKeyILS
             }
             catch (FormatException)
             {
-                MessageBox.Show("Error: Please enter a numeric value for the item you wish to return/renew");
+                MessageBox.Show("Error: Please enter a numeric value for the item you wish to renew");
             }
         }
 
@@ -110,6 +110,35 @@ namespace FayeKeyILS
                 MessageBox.Show("Error: Please enter a numeric value for both Patron and Material ID");
             }
 
+        }
+
+        private void btn_Renew_Click(object sender, EventArgs e)
+        {
+            long processedMaterialId;
+            try
+            {
+                processedMaterialId = Convert.ToInt64(txt_ReturnRenew.Text);
+
+                List<Checkout> allCheckouts = dbc.GetFullCheckoutInfo();
+
+                if (allCheckouts.Any(i => i.materialID == processedMaterialId) == true)
+                {
+                    dbc.Renew(processedMaterialId);
+
+                    // Clear textbox for next entry and provide feedback to user
+                    txt_ReturnRenew.Text = "";
+                    MessageBox.Show("Material renewed!");
+                }
+                else
+                {
+                    MessageBox.Show("Error: Item is not checked out");
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Error: Please enter a numeric value for the item you wish to renew");
+            }
+        
         }
     }
 }
