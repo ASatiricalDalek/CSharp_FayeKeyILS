@@ -224,6 +224,35 @@ namespace FayeKeyILS
             return allCheckouts;
         }
 
+        public List<Material> GetPatronCheckouts(long pId)
+        {
+            List <Material> patronItems = new List<Material>();
+
+            using (var db = new ILSDBEntities())
+            {
+                patronItems = db.Materials.Where(c => c.patronLibraryID == pId).ToList();
+            }
+
+            return patronItems;
+        }
+
+        /// <summary>
+        /// Returns a materials checkout record including it's checkout and return dates.
+        /// </summary>
+        /// <param name="matID">ID of the material</param>
+        /// <returns>List of that material's checkout information</returns>
+        public List<Checkout> GetCheckoutRecord(long matID)
+        {
+            List<Checkout> checkoutRecord = new List<Checkout>();
+
+            using (var db = new ILSDBEntities())
+            {
+                checkoutRecord = db.Checkouts.Where(r => r.materialID == matID).ToList();
+            }
+
+            return checkoutRecord;
+        }
+
         /// <summary>
         /// Returns an item by removing it from the checkout table and stripping the patron ID from the materials table
         /// </summary>

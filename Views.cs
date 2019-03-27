@@ -58,6 +58,9 @@ namespace FayeKeyILS
                 lbl_phone.Text = selectedPatron.patronPhone.ToString();
             }
 
+            lst_CheckedOut.DataSource = dbc.GetPatronCheckouts(selectedPatron.Id);
+            lst_CheckedOut.DisplayMember = "materialName";
+
         }
 
         private void lst_Patrons_Format(object sender, ListControlConvertEventArgs e)
@@ -66,6 +69,20 @@ namespace FayeKeyILS
             string fName = ((Patron)e.ListItem).patronFirstName.ToString();
             string lName = ((Patron)e.ListItem).patronLastName.ToString();
             e.Value = fName + " " + lName;
+        }
+
+        private void lst_CheckedOut_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lst_CheckedOut.SelectedItem != null)
+            {
+                Material selectedMaterial = (Material)lst_CheckedOut.SelectedItem;
+                List<Checkout> checkoutRecord = dbc.GetCheckoutRecord(selectedMaterial.Id);
+
+                lbl_ItemName.Text = selectedMaterial.materialName;
+                lbl_CheckoutDate.Text = checkoutRecord[0].checkoutDate.ToString();
+                lbl_ReturnDate.Text = checkoutRecord[0].returnDate.ToString();
+                lbl_ItemID.Text = checkoutRecord[0].materialID.ToString();
+            }
         }
     }
 }
