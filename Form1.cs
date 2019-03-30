@@ -37,7 +37,7 @@ namespace FayeKeyILS
 
         private void viewMaterialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form viewMaterials = new Views();
+            Form viewMaterials = new MatView();
             viewMaterials.Show();
         }
 
