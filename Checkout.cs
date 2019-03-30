@@ -16,10 +16,10 @@ namespace FayeKeyILS
     {
         public long materialID { get; set; }
         public long patronLibraryID { get; set; }
-        public decimal returnDate { get; set; }
-        public decimal checkoutDate { get; set; }
+        public string returnDate { get; set; }
+        public string checkoutDate { get; set; }
     
-        public virtual Patron Patron { get; set; }
         public virtual Material Material { get; set; }
+        public virtual Patron Patron { get; set; }
     }
 }
