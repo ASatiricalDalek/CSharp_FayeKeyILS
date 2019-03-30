@@ -145,5 +145,11 @@ namespace FayeKeyILS
         {
             Application.Exit();
         }
+
+        private void addMaterialsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form addMat = new MatAdd();
+            addMat.Show();
+        }
     }
 }
