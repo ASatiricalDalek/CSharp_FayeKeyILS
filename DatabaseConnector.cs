@@ -70,26 +70,14 @@ namespace FayeKeyILS
 
         public List<Patron> GetFullPatronInfo()
         {
-            List<long> id = new List<long>();
-            List<string> fName = new List<string>();
-            List<string> lName = new List<string>();
-            List<string> email = new List<string>();
-            List<string> phone = new List<string>();
+            List<Patron> allPatrons = new List<Patron>();
 
-            List<Patron> patron = new List<Patron>();
-
-            id = GetPatronID();
-            fName = GetPatronFirstName();
-            lName = GetPatronLastName();
-            email = GetPatronEmail();
-            phone = GetPatronPhone();
-
-            for (int i = 0; i < fName.Count(); i++)
+            using (var db = new ILSDBEntities())
             {
-                patron.Add(new Patron { Id = id[i], patronFirstName = fName[i], patronLastName = lName[i], patronEmail = email[i], patronPhone = phone[i] });
+                allPatrons = db.Patrons.ToList();
             }
 
-            return patron;
+            return allPatrons;
         }
         /// <summary>
         /// Add a patron
@@ -146,6 +134,10 @@ namespace FayeKeyILS
             }
         }
 
+        /// <summary>
+        /// Generates a new, unique, sequential patron ID
+        /// </summary>
+        /// <returns>Unique patron ID of type long</returns>
         private long generatePatronId()
         {
             // Count+1 only works as long as members aren't deleted from the list, which they are in this application
@@ -175,45 +167,158 @@ namespace FayeKeyILS
             return newid;
         }
 
+        /// <summary>
+        /// Performs a checkout by updating the checkout table with the patron ID, Material ID, return date, and checkout date
+        /// Also adds the patron ID to the material's entry on the material table as a foreign key
+        /// </summary>
+        /// <param name="mId">Material ID to uniquely identify the material</param>
+        /// <param name="pId">Patron ID to uniquely identify the patron</param>
         public void checkoutMaterial(long mId, long pId)
         {
             using(var db = new ILSDBEntities())
             {
+                DateTime currentDate, returnDate;
+                string currentMaterialType;
+                // Queries must be converted to lists, even if the query will only return one value
+                // Load the currently selected material into a variable
+                List<Material> currentMaterial = db.Materials.Where(i => i.Id == mId).ToList();
+                currentMaterialType = currentMaterial[0].materialType;
+                // Look up and load the entry for this material type's loan length
+                List<LoanLength> loanLengthEntry = db.LoanLengths.Where(l => l.MaterialType == currentMaterialType).ToList();
+                
                 List<Checkout> allCheckouts = new List<Checkout>();
-                allCheckouts = GetFullCheckoutInfo();
+                currentDate = DateTime.Now;
+                // Since ID is the primary key, there will only ever be one entry in the list
+                returnDate = currentDate.AddDays(loanLengthEntry[0].LoanLength1);
+
                 Checkout currentCheckout = new Checkout
                 {
                     materialID = mId,
                     patronLibraryID = pId,
-                    returnDate = 0,
-                    checkoutDate = 0
+                    returnDate = returnDate.ToString("MM/dd/yyyy"),
+                    checkoutDate = currentDate.ToString("MM/dd/yyyy")
                 };
+                // Add the checkout to the checkout table
                 db.Checkouts.Add(currentCheckout);
+                // Associate the patron checking out ID with the material record
+                currentMaterial[0].patronLibraryID = pId;
+                // Save changes
                 db.SaveChanges();
                 db.Dispose();
             }
         }
 
-        public List<Patron> GetFullCheckoutInfo()
+        /// <summary>
+        /// Gets the entire checkout table
+        /// </summary>
+        /// <returns>List of all checkouts</returns>
+        public List<Checkout> GetFullCheckoutInfo()
         {
-            List<long> mID = new List<long>();
-            List<long> pID = new List<long>();
-            List<DateTime> returnDate = new List<DateTime>();
-            List<DateTime> checkoutDate = new List<DateTime>();
-            List<Checkout> checkout = new List<Checkout>();
+            List<Checkout> allCheckouts = new List<Checkout>();
 
-
-            mID = GetMaterialID();
-            pID = GetPatronID();
-            returnDate = GetReturnDate();
-            checkoutDate = GetCheckoutDate();
-
-            for (int i = 0; i < fName.Count(); i++)
+            using (var db = new ILSDBEntities())
             {
-                checkout.Add(new Checkout { materialID = mID[i], patronLibraryID = pID[i], returnDate = returnDate[i], checkoutDate = checkoutDate[i] });
+                allCheckouts = db.Checkouts.ToList();
             }
 
-            return checkout;
+            return allCheckouts;
+        }
+
+        public List<Material> GetPatronCheckouts(long pId)
+        {
+            List <Material> patronItems = new List<Material>();
+
+            using (var db = new ILSDBEntities())
+            {
+                patronItems = db.Materials.Where(c => c.patronLibraryID == pId).ToList();
+            }
+
+            return patronItems;
+        }
+
+        /// <summary>
+        /// Returns a materials checkout record including it's checkout and return dates.
+        /// </summary>
+        /// <param name="matID">ID of the material</param>
+        /// <returns>List of that material's checkout information</returns>
+        public List<Checkout> GetCheckoutRecord(long matID)
+        {
+            List<Checkout> checkoutRecord = new List<Checkout>();
+
+            using (var db = new ILSDBEntities())
+            {
+                checkoutRecord = db.Checkouts.Where(r => r.materialID == matID).ToList();
+            }
+
+            return checkoutRecord;
+        }
+
+        public List<Material> GetFullMaterialRecord(long materialID)
+        {
+            List<Material> fullMaterial = new List<Material>();
+
+            using (var db = new ILSDBEntities())
+            {
+                fullMaterial = db.Materials.ToList();
+            }
+
+            return fullMaterial;
+        }
+
+        public int GetLoanLength(long materialID)
+        {
+            Material mat = new Material();
+            using (var db = new ILSDBEntities())
+            {
+                mat = db.Materials.First(i => i.Id == materialID);
+            }
+
+            return Convert.ToInt32(mat.materialLoanLength);
+        }
+
+        /// <summary>
+        /// Returns an item by removing it from the checkout table and stripping the patron ID from the materials table
+        /// </summary>
+        /// <param name="mId">Material ID that uniquely identifies the material you want to return</param>
+        public void Return(long mId)
+        {
+            List<Checkout> allCheckouts = GetFullCheckoutInfo();
+            long pId;
+
+            if (allCheckouts.Any(i => i.materialID == mId) == true)
+            {
+                using (var db = new ILSDBEntities())
+                {
+                    // Remove entry from checkout table
+                    Checkout chk = db.Checkouts.First(c => c.materialID == mId);
+                    pId = chk.patronLibraryID;
+                    db.Checkouts.Attach(chk);
+                    db.Checkouts.Remove(chk);
+
+                    // Remove library ID from field 
+                    Material mat = db.Materials.First(m => m.patronLibraryID == pId);
+                    mat.patronLibraryID = null;
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void Renew(long mId)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Checkout currentOut = db.Checkouts.First(i => i.materialID == mId);
+                DateTime currentReturn, newReturn;
+                int length = GetLoanLength(mId);
+
+                currentReturn = DateTime.ParseExact(currentOut.returnDate, "MM/dd/yyyy", null);
+                newReturn = currentReturn.AddDays(length);
+
+                currentOut.returnDate = newReturn.ToString("MM/dd/yyyy");
+                db.SaveChanges();
+
+            }
         }
     }
 }
