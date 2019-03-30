@@ -109,7 +109,7 @@ namespace FayeKeyILS
         /// <param name="pId">Selected patron id</param>
         public void removePatron(long pId)
         {
-            using(var db = new ILSDBEntities())
+            using (var db = new ILSDBEntities())
             {
                 Patron r = db.Patrons.First(i => i.Id == pId);
                 db.Patrons.Attach(r);
@@ -117,12 +117,12 @@ namespace FayeKeyILS
                 db.SaveChanges();
                 db.Dispose();
             }
-            
+
         }
-        
+
         public void updatePatron(long pId, string fname, string lname, string email, string phone)
         {
-            using(var db = new ILSDBEntities())
+            using (var db = new ILSDBEntities())
             {
                 Patron u = db.Patrons.First(i => i.Id == pId);
                 u.patronFirstName = fname;
@@ -175,7 +175,7 @@ namespace FayeKeyILS
         /// <param name="pId">Patron ID to uniquely identify the patron</param>
         public void checkoutMaterial(long mId, long pId)
         {
-            using(var db = new ILSDBEntities())
+            using (var db = new ILSDBEntities())
             {
                 DateTime currentDate, returnDate;
                 string currentMaterialType;
@@ -185,7 +185,7 @@ namespace FayeKeyILS
                 currentMaterialType = currentMaterial[0].materialType;
                 // Look up and load the entry for this material type's loan length
                 List<LoanLength> loanLengthEntry = db.LoanLengths.Where(l => l.MaterialType == currentMaterialType).ToList();
-                
+
                 List<Checkout> allCheckouts = new List<Checkout>();
                 currentDate = DateTime.Now;
                 // Since ID is the primary key, there will only ever be one entry in the list
@@ -226,7 +226,7 @@ namespace FayeKeyILS
 
         public List<Material> GetPatronCheckouts(long pId)
         {
-            List <Material> patronItems = new List<Material>();
+            List<Material> patronItems = new List<Material>();
 
             using (var db = new ILSDBEntities())
             {
@@ -320,9 +320,123 @@ namespace FayeKeyILS
 
             }
         }
+
+        public List<Material> GetFullMatInfo()
+        {
+            List<Material> allMat = new List<Material>();
+
+            using (var db = new ILSDBEntities())
+            {
+                allMat = db.Materials.ToList();
+            }
+
+            return allMat;
+        }
+
+        public List<long> GetMatID()
+        {
+            List<long> matIDs = new List<long>();
+
+            using (var db = new ILSDBEntities())
+            {
+                matIDs = (from mat in db.Materials select mat.Id).ToList();
+            }
+
+            return matIDs;
+        }
+
+        public List<string> GetMatType()
+        {
+            List<string> matType = new List<string>();
+
+            using (var db = new ILSDBEntities())
+            {
+                matType = (from mat in db.LoanLengths select mat.MaterialType).ToList();
+            }
+
+            return matType;
+        }
+
+        private long generateMatId()
+        {
+            // Count+1 only works as long as members aren't deleted from the list, which they are in this application
+            // This method will ensure that the new ID is always one greater than the highest ID currently in the database, whatever that may be
+
+            List<Material> allMat = new List<Material>();
+            List<long> allIDs = new List<long>();
+            long newid;
+
+            allMat = GetFullMatInfo();
+
+            foreach (Material mat in allMat)
+            {
+                allIDs.Add(mat.Id);
+            }
+            if (allIDs.Count > 0)
+            {
+                newid = allIDs.Max() + 1;
+            }
+            else
+            {
+                // If the database is empty, the ID will start at 1
+                newid = 1;
+            }
+
+
+            return newid;
+        }
+        public long getMatLoanLength(string type)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                LoanLength l = db.LoanLengths.First(c => c.MaterialType == type);
+                return l.LoanLength1;
+            }
+        }
+
+        public void addMat(string mtype, string mname)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Material newMat = new Material
+                {
+                    materialType = mtype,
+                    materialName = mname,
+                    materialLoanLength = getMatLoanLength(mtype),
+                    Id = generateMatId()
+                };
+                db.Materials.Add(newMat);
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
+
+        public void removeMat(long mId)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Material r = db.Materials.First(i => i.Id == mId);
+                db.Materials.Attach(r);
+                db.Materials.Remove(r);
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
+
+        public void updateMaterial(long mId, string mname, string mtype)
+        {
+            using (var db = new ILSDBEntities())
+            {
+                Material m = db.Materials.First(i => i.Id == mId);
+                m.materialName = mname;
+                m.materialType = mtype;
+                m.materialLoanLength = getMatLoanLength(mtype);
+                db.SaveChanges();
+                db.Dispose();
+            }
+        }
     }
 }
-
 
             
 

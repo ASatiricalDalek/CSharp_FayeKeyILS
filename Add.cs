@@ -125,7 +125,7 @@ namespace FayeKeyILS
         {
             List<long> removePatronIDs = new List<long>(); //repopulate remove combo box list
             removePatronIDs = dbc.GetPatronID();
-            cmb_RemovePatronSelector.DataSource = removePatronIDs;
+            cmb_RemovePatronSelector.DataSource= removePatronIDs;
         }
     }
 }

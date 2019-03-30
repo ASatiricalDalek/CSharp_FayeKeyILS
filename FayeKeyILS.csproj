@@ -109,6 +109,12 @@
     <Compile Include="Material.cs">
       <DependentUpon>ILSDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MatView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MatView.Designer.cs">
+      <DependentUpon>MatView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Patron.cs">
       <DependentUpon>ILSDBModel.tt</DependentUpon>
     </Compile>
@@ -128,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MatAdd.resx">
       <DependentUpon>MatAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MatView.resx">
+      <DependentUpon>MatView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
