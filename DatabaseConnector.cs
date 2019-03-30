@@ -198,8 +198,8 @@ namespace FayeKeyILS
         {
             List<long> mID = new List<long>();
             List<long> pID = new List<long>();
-            List<DateTime> returnDate = new List<DateTime>();
-            List<DateTime> checkoutDate = new List<DateTime>();
+            List<decimal> returnDate = new List<decimal>();
+            List<decimal> checkoutDate = new List<decimal>();
             List<Checkout> checkout = new List<Checkout>();
 
 
