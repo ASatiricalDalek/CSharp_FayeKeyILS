@@ -96,7 +96,7 @@ namespace FayeKeyILS
         {
             Material selectedMaterial = (Material)cmb_UpdateMatId.SelectedItem;
             string matTitle = txt_UpdateMatTitle.Text;
-            string matType = cmb_AddMatType.GetItemText(cmb_AddMatType.SelectedItem);
+            string matType = cmb_UpdateMatType.GetItemText(cmb_UpdateMatType.SelectedItem);
 
             if (String.IsNullOrEmpty(matTitle) == false)
             {
