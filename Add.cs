@@ -17,7 +17,7 @@ namespace FayeKeyILS
         {
             InitializeComponent();
         }
-
+        //Loads Add form combo boxes with up to date information
         private void Add_Load(object sender, EventArgs e)
         {
             rebuildRemoveCombo();

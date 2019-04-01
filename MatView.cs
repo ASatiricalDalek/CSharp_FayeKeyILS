@@ -21,8 +21,6 @@ namespace FayeKeyILS
         private void MatView_Load(object sender, EventArgs e)
         {
             List<Material> patrons = new List<Material>();
-
-            // TODO: Create actual FullName property in the Patron object so it can be displayed everywhere, like here.
             patrons = dbc.GetFullMatInfo();
             // Populates listbox with patron info from DB
             lst_Mat.DataSource = patrons;

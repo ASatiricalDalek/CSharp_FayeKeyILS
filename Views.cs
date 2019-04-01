@@ -70,7 +70,7 @@ namespace FayeKeyILS
             string lName = ((Patron)e.ListItem).patronLastName.ToString();
             e.Value = fName + " " + lName;
         }
-
+        //updates bottom portion of view if a different material is selected
         private void lst_CheckedOut_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lst_CheckedOut.SelectedItem != null)

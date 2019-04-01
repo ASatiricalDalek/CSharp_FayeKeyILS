@@ -8,6 +8,10 @@ namespace FayeKeyILS
 {
     class DatabaseConnector
     {
+        /// <summary>
+        /// Get list of all patron id's in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<long> GetPatronID()
         {
             List<long> patronIDs = new List<long>();
@@ -19,7 +23,10 @@ namespace FayeKeyILS
 
             return patronIDs;
         }
-
+        /// <summary>
+        /// Get list of all patron first names in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetPatronFirstName()
         {
             List<string> patronNames = new List<string>();
@@ -31,7 +38,10 @@ namespace FayeKeyILS
 
             return patronNames;
         }
-
+        /// <summary>
+        /// Get list of all last names in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetPatronLastName()
         {
             List<string> patronLastNames = new List<string>();
@@ -43,7 +53,10 @@ namespace FayeKeyILS
 
             return patronLastNames;
         }
-
+        /// <summary>
+        /// Get list of all emails in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetPatronEmail()
         {
             List<string> patronEmail = new List<string>();
@@ -55,7 +68,10 @@ namespace FayeKeyILS
 
             return patronEmail;
         }
-
+        /// <summary>
+        /// Get list of all phone numbers in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetPatronPhone()
         {
             List<string> patronPhone = new List<string>();
@@ -67,7 +83,10 @@ namespace FayeKeyILS
 
             return patronPhone;
         }
-
+        /// <summary>
+        /// Get list of all patron info in patron db table
+        /// </summary>
+        /// <returns></returns>
         public List<Patron> GetFullPatronInfo()
         {
             List<Patron> allPatrons = new List<Patron>();
@@ -119,7 +138,14 @@ namespace FayeKeyILS
             }
 
         }
-
+        /// <summary>
+        /// Updates Patron information
+        /// </summary>
+        /// <param name="pId">Given patron id</param>
+        /// <param name="fname">Updated patron first name</param>
+        /// <param name="lname">Updated patron last name</param>
+        /// <param name="email">Updated patron email</param>
+        /// <param name="phone">Updated patron phone number</param>
         public void updatePatron(long pId, string fname, string lname, string email, string phone)
         {
             using (var db = new ILSDBEntities())
@@ -252,7 +278,11 @@ namespace FayeKeyILS
 
             return checkoutRecord;
         }
-
+        /// <summary>
+        /// Gets full information about the material associated with the given material id
+        /// </summary>
+        /// <param name="materialID">Id of the material which information is requested</param>
+        /// <returns></returns>
         public List<Material> GetFullMaterialRecord(long materialID)
         {
             List<Material> fullMaterial = new List<Material>();
@@ -264,7 +294,11 @@ namespace FayeKeyILS
 
             return fullMaterial;
         }
-
+        /// <summary>
+        /// Gets Integer value of loan length on material associated with given material id
+        /// </summary>
+        /// <param name="materialID">Id of the material which information is requested</param>
+        /// <returns></returns>
         public int GetLoanLength(long materialID)
         {
             Material mat = new Material();
@@ -303,7 +337,10 @@ namespace FayeKeyILS
                 }
             }
         }
-
+        /// <summary>
+        /// Renews the checkout of the material associated with the given materialid
+        /// </summary>
+        /// <param name="mId">Id of the material whose checkout should be renewed</param>
         public void Renew(long mId)
         {
             using (var db = new ILSDBEntities())
@@ -320,7 +357,10 @@ namespace FayeKeyILS
 
             }
         }
-
+        /// <summary>
+        /// Returns list of all materials in materials db
+        /// </summary>
+        /// <returns></returns>
         public List<Material> GetFullMatInfo()
         {
             List<Material> allMat = new List<Material>();
@@ -332,7 +372,10 @@ namespace FayeKeyILS
 
             return allMat;
         }
-
+        /// <summary>
+        /// returns list of all material id's in material db
+        /// </summary>
+        /// <returns></returns>
         public List<long> GetMatID()
         {
             List<long> matIDs = new List<long>();
@@ -344,7 +387,10 @@ namespace FayeKeyILS
 
             return matIDs;
         }
-
+        /// <summary>
+        /// gets material type of all materials in material db
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetMatType()
         {
             List<string> matType = new List<string>();
@@ -356,7 +402,10 @@ namespace FayeKeyILS
 
             return matType;
         }
-
+        /// <summary>
+        /// Generates a new, unique, sequential material ID
+        /// </summary>
+        /// <returns>Unique material ID of type long</returns>
         private long generateMatId()
         {
             // Count+1 only works as long as members aren't deleted from the list, which they are in this application
@@ -385,6 +434,11 @@ namespace FayeKeyILS
 
             return newid;
         }
+        /// <summary>
+        /// gets the correct loan length from the LoanLengths table depending on which material type is queried
+        /// </summary>
+        /// <param name="type">Material Type which the loan length is needed</param>
+        /// <returns></returns>
         public long getMatLoanLength(string type)
         {
             using (var db = new ILSDBEntities())
@@ -393,7 +447,11 @@ namespace FayeKeyILS
                 return l.LoanLength1;
             }
         }
-
+        /// <summary>
+        /// Adds a material to the material tb
+        /// </summary>
+        /// <param name="mtype">The type of material to be added</param>
+        /// <param name="mname">The name of the material to be added</param>
         public void addMat(string mtype, string mname)
         {
             using (var db = new ILSDBEntities())
@@ -402,15 +460,18 @@ namespace FayeKeyILS
                 {
                     materialType = mtype,
                     materialName = mname,
-                    materialLoanLength = getMatLoanLength(mtype),
-                    Id = generateMatId()
+                    materialLoanLength = getMatLoanLength(mtype), //gets the loan length associated to the given material type
+                    Id = generateMatId() //generates unique material id
                 };
                 db.Materials.Add(newMat);
                 db.SaveChanges();
                 db.Dispose();
             }
         }
-
+        /// <summary>
+        /// Removes material with given id from material db
+        /// </summary>
+        /// <param name="mId"></param>
         public void removeMat(long mId)
         {
             using (var db = new ILSDBEntities())
@@ -422,7 +483,12 @@ namespace FayeKeyILS
                 db.Dispose();
             }
         }
-
+        /// <summary>
+        /// updates material with given id in material db
+        /// </summary>
+        /// <param name="mId">Material Id that is to be updated</param>
+        /// <param name="mname">Material Name to updated to</param>
+        /// <param name="mtype">Material type to update to</param>
         public void updateMaterial(long mId, string mname, string mtype)
         {
             using (var db = new ILSDBEntities())
